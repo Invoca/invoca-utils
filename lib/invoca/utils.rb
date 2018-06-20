@@ -4,6 +4,7 @@ require "invoca/utils/map_compact"
 require "invoca/utils/min_max"
 require "invoca/utils/stable_sort"
 require "invoca/utils/time"
+require "invoca/guaranteed_utf8_string"
 require "invoca/utils/version"
 
 module Invoca
