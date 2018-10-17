@@ -27,6 +27,7 @@ module Invoca
                       raise ArgumentError, "must be passed a string or an object with a non-Kernel .to_s method but instead was #{orig_string.class} #{orig_string.inspect}"
                     end
           string.force_encoding('UTF-8')
+          normalize_utf_16(string)
           unless string.valid_encoding?
             if normalize_cp1252
               cp1252_to_utf_8(string)
@@ -41,6 +42,32 @@ module Invoca
         end
 
         private
+
+        UTF_16_LE_BOM = "\xFF\xFE"
+        UTF_16_BE_BOM = "\xFE\xFF"
+
+        PRIVATE_CP1252_CHAR_PATTERN = "[\u0080-\u009f]"
+        PRIVATE_CP1252_CHAR_PATTERN_UTF_16LE = Regexp.new(PRIVATE_CP1252_CHAR_PATTERN.encode('UTF-16LE'))
+        PRIVATE_CP1252_CHAR_PATTERN_UTF_16BE = Regexp.new(PRIVATE_CP1252_CHAR_PATTERN.encode('UTF-16BE'))
+
+        def normalize_utf_16(string)
+          case string[0, 2]
+          when UTF_16_LE_BOM
+            string.slice!(0, 2)                 # remove the BOM
+            string.force_encoding('UTF-16LE')
+            normalize_multibyte_cp1252(string, PRIVATE_CP1252_CHAR_PATTERN_UTF_16LE, 'UTF-16LE')
+            string.encode!('UTF-8')
+          when UTF_16_BE_BOM
+            string.slice!(0, 2)                 # remove the BOM
+            string.force_encoding('UTF-16BE')
+            normalize_multibyte_cp1252(string, PRIVATE_CP1252_CHAR_PATTERN_UTF_16BE, 'UTF-16BE')
+            string.encode!('UTF-8')
+          end
+        end
+
+        def normalize_multibyte_cp1252(string, pattern, encoding)
+          string.gsub!(pattern) { |c| c.ord.chr.force_encoding('CP1252').encode('UTF-8').encode(encoding) }
+        end
 
         def normalize_newlines(string)
           string.gsub!(/ \r\n | \r | \n /x, "\n")
