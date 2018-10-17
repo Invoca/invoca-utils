@@ -15,7 +15,7 @@ module Invoca
       end
 
       def to_string
-        @to_string ||= normalize_string(@string)
+        @to_string ||= self.class.normalize_string(@string)
       end
 
       alias to_s to_string
@@ -23,42 +23,52 @@ module Invoca
       private
 
       # chosen because this is a 1-byte ASCII character that is not used in any of the popular escaping systems: XML, HTML, HTTP URIs, HTTP Form Post, JSON
-      REPLACE_CHARACTER = '~' unless defined?(REPLACE_CHARACTER)
+      REPLACE_CHARACTER = '~'
 
-      def normalize_string(_orig_str)
-        str = @to_string.dup
-        str.force_encoding('UTF-8')
-        cp1252_to_utf_8(str) unless str.valid_encoding?
-        normalize_newlines(str)
-        remove_bom(str)
-        replace_unicode_beyond_ffff(str)
-        str
-      end
+      class << self
+        def normalize_string(orig_str, normalize_cp1252: true, normalize_newlines: true, remove_utf8_bom: true, replace_unicode_beyond_ffff: true)
+          str = orig_str.dup
+          str.force_encoding('UTF-8')
+          unless str.valid_encoding?
+            if normalize_cp1252
+              cp1252_to_utf_8(str)
+            else
+              raise ArgumentError, "Could not normalize to utf8 due to invalid characters (possibly CP1252)"
+            end
+          end
+          normalize_newlines(str) if normalize_newlines
+          remove_utf8_bom(str) if remove_utf8_bom
+          replace_unicode_beyond_ffff(str) if replace_unicode_beyond_ffff
+          str
+        end
 
-      def normalize_newlines(str)
-        str.gsub!(/ \r\n | \r | \n /x, "\n")
-      end
+        private
 
-      def cp1252_to_utf_8(str)
-        str.force_encoding('CP1252')
-        str.encode!(
-          'UTF-8',
-          replace:  REPLACE_CHARACTER,
-          undef:    :replace,
-          invalid:  :replace
-        )
-      end
+        def normalize_newlines(str)
+          str.gsub!(/ \r\n | \r | \n /x, "\n")
+        end
 
-      def remove_bom(str)
-        str.sub!(/\A \xEF\xBB\xBF/x, '')
-      end
+        def cp1252_to_utf_8(str)
+          str.force_encoding('CP1252')
+          str.encode!(
+            'UTF-8',
+            replace:  REPLACE_CHARACTER,
+            undef:    :replace,
+            invalid:  :replace
+          )
+        end
 
-      # Note MySQL can only store Unicode up to code point U+FFFF in the standard mb3 storage type. There is an option to use mb4 which
-      # is needed to hold the code points above that (including emoji) but we haven't enabled that on any columns yet since
-      # it would take a data migration and didn't seem that important.
+        def remove_utf8_bom(str)
+          str.sub!(/\A \xEF\xBB\xBF/x, '')
+        end
 
-      def replace_unicode_beyond_ffff(str)
-        str.gsub!(/[^\u{0}-\u{ffff}]/x, REPLACE_CHARACTER)
+        # Note MySQL can only store Unicode up to code point U+FFFF in the standard mb3 storage type. There is an option to use mb4 which
+        # is needed to hold the code points above that (including emoji) but we haven't enabled that on any columns yet since
+        # it would take a data migration and didn't seem that important.
+
+        def replace_unicode_beyond_ffff(str)
+          str.gsub!(/[^\u{0}-\u{ffff}]/x, REPLACE_CHARACTER)
+        end
       end
     end
   end
