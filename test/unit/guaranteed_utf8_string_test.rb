@@ -18,21 +18,25 @@ class GuaranteedUTF8StringTest < Minitest::Test
     end
   end
 
-  should "raise an error if initialized with an object with no to_s method" do
-    assert_raises ArgumentError, /GuaranteedUTF8String must be initialized with a string or an object with a non-Kernel \.to_s method but instead was GuaranteedUTF8StringTest::HasNoTo_sMethod/ do
-      Invoca::Utils::GuaranteedUTF8String.new(HasNoTo_sMethod.new)
+  should "raise an error if called with an object with no to_s method" do
+    ex = assert_raises ArgumentError do
+      Invoca::Utils::GuaranteedUTF8String.normalize_string(HasNoTo_sMethod.new)
     end
+
+    assert_match(/must be passed a string or an object with a non-Kernel \.to_s method but instead was GuaranteedUTF8StringTest::HasNoTo_sMethod/, ex.message)
   end
 
-  should "raise an error if initialized with a basic Ruby object" do
-    assert_raises ArgumentError, /GuaranteedUTF8String must be initialized with a string or an object with a non-Kernel \.to_s method but instead was GuaranteedUTF8StringTest::BasicObjectWithKernelMethods/ do
-      Invoca::Utils::GuaranteedUTF8String.new(BasicObjectWithKernelMethods.new)
+  should "raise an error if called with a basic Ruby object" do
+    ex = assert_raises ArgumentError do
+      Invoca::Utils::GuaranteedUTF8String.normalize_string(BasicObjectWithKernelMethods.new)
     end
+
+    assert_match(/must be passed a string or an object with a non-Kernel \.to_s method but instead was GuaranteedUTF8StringTest::BasicObjectWithKernelMethods/, ex.message)
   end
 
   should "convert to a string with to_s if possible" do
-    result = Invoca::Utils::GuaranteedUTF8String.new(ConvertibleToString.new("test string"))
-    assert_equal "test string", result.to_string
+    result = Invoca::Utils::GuaranteedUTF8String.normalize_string(ConvertibleToString.new("test string"))
+    assert_equal "test string", result
   end
 
   context ".normalize_string" do
@@ -54,61 +58,98 @@ class GuaranteedUTF8StringTest < Minitest::Test
       assert_equal Encoding::UTF_8, encoded_string.encoding
     end
 
-    should "return UTF-8 encoded string without BOM" do
-      original_string = "\xEF\xBB\xBFthis,is,a,valid,utf-8,csv,string\none,two,three,four,five,six,seven\n"
+    context "normalize_cp1252" do
+      setup do
+        @string = "This,is,NOT,a,valid,utf-8,csv,string\r\none,two,three,four,\x81five\xF6,six,seven,eight\n"
+      end
 
-      encoded_string = Invoca::Utils::GuaranteedUTF8String.normalize_string(original_string)
+      should "raise ArgumentError when false" do
+        assert_raises(ArgumentError, /xxyy/) do
+          Invoca::Utils::GuaranteedUTF8String.normalize_string(@string, normalize_cp1252: false)
+        end
+      end
 
-      assert_equal "this,is,a,valid,utf-8,csv,string\none,two,three,four,five,six,seven\n", encoded_string
-      assert_equal Encoding::UTF_8, encoded_string.encoding
+      should "return UTF-8 encoded string after falling back to CP1252 encoding when true" do
+        expected_string = "This,is,NOT,a,valid,utf-8,csv,string\none,two,three,four,~fiveö,six,seven,eight\n"
+
+        encoded_string = Invoca::Utils::GuaranteedUTF8String.normalize_string(@string)
+
+        assert_equal expected_string, encoded_string
+        assert_equal Encoding::UTF_8, encoded_string.encoding
+      end
+
+      should "encode all 255 UTF-8 characters, returning ~ when the character isn't mapped in CP1252" do
+        all_8_bit_characters = (1..255).map { |char| char.chr }.join
+
+        final_utf_8_string = Invoca::Utils::GuaranteedUTF8String.normalize_string(all_8_bit_characters)
+        expected_string = "\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\u0009\u000A\u000B\u000C\u000A\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F !\"\#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\u007F€~‚ƒ„…†‡ˆ‰Š‹Œ~Ž~~‘’“”•–—˜™š›œ~žŸ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ"
+
+        assert_equal expected_string, final_utf_8_string
+      end
     end
 
-    should "return UTF-8 encoded string using to_s alias" do
-      original_string = "this,is,a,valid,utf-8,csv,string\none,two,three,four,five,six,seven\n"
+    context "normalize_newlines" do
+      setup do
+        @string = "This string\n\n\n has line feeds\ncarriage\r\r returns\rand Windows\r\n\r\n new line chars\r\nend of \n\r\r\r\nstring"
+      end
 
-      encoded_string = Invoca::Utils::GuaranteedUTF8String.normalize_string(original_string)
+      should "return UTF-8 encoded string without normalized return chars when false" do
+        encoded_string = Invoca::Utils::GuaranteedUTF8String.normalize_string(@string, normalize_newlines: false)
 
-      assert_equal original_string, encoded_string
-      assert_equal Encoding::UTF_8, encoded_string.encoding
+        assert_equal @string, encoded_string
+        assert_equal Encoding::UTF_8, encoded_string.encoding
+      end
+
+      should "return UTF-8 encoded string with normalized return chars when true" do
+        expected_string = "This string\n\n\n has line feeds\ncarriage\n\n returns\nand Windows\n\n new line chars\nend of \n\n\n\nstring"
+
+        encoded_string = Invoca::Utils::GuaranteedUTF8String.normalize_string(@string, normalize_newlines: true)
+
+        assert_equal expected_string, encoded_string
+        assert_equal Encoding::UTF_8, encoded_string.encoding
+      end
     end
 
-    should "return UTF-8 encoded string after falling back to CP1252 encoding" do
-      string = "This,is,NOT,a,valid,utf-8,csv,string\r\none,two,three,four,\x81five\xF6,six,seven,eight\n"
-      expected_string = "This,is,NOT,a,valid,utf-8,csv,string\none,two,three,four,~fiveö,six,seven,eight\n"
+    context "remove_utf8_bom" do
+      setup do
+        @original_string = "\xEF\xBB\xBFthis,is,a,valid,utf-8,csv,string\none,two,three,four,five,six,seven\n"
+      end
 
-      encoded_string = Invoca::Utils::GuaranteedUTF8String.normalize_string(string)
+      should "return UTF-8 encoded string with BOM intact when false" do
+        encoded_string = Invoca::Utils::GuaranteedUTF8String.normalize_string(@original_string, remove_utf8_bom: false)
 
-      assert_equal expected_string, encoded_string
-      assert_equal Encoding::UTF_8, encoded_string.encoding
+        assert_equal "\xEF\xBB\xBFthis,is,a,valid,utf-8,csv,string\none,two,three,four,five,six,seven\n", encoded_string
+        assert_equal Encoding::UTF_8, encoded_string.encoding
+      end
+
+      should "return UTF-8 encoded string without BOM when true" do
+        encoded_string = Invoca::Utils::GuaranteedUTF8String.normalize_string(@original_string, remove_utf8_bom: true)
+
+        assert_equal "this,is,a,valid,utf-8,csv,string\none,two,three,four,five,six,seven\n", encoded_string
+        assert_equal Encoding::UTF_8, encoded_string.encoding
+      end
     end
 
-    should "return UTF-8 encoded string with normalized return chars" do
-      string          = "This string\n\n\n has line feeds\ncarriage\r\r returns\rand Windows\r\n\r\n new line chars\r\nend of \n\r\r\r\nstring"
-      expected_string = "This string\n\n\n has line feeds\ncarriage\n\n returns\nand Windows\n\n new line chars\nend of \n\n\n\nstring"
+    context "replace_unicode_beyond_ffff" do
+      setup do
+        @string = "This string has some ✓ valid UTF-8 but also some 😹 emoji \xf0\x9f\x98\xb9 that are > U+FFFF"
+      end
 
-      encoded_string = Invoca::Utils::GuaranteedUTF8String.normalize_string(string)
+      should "consider UTF-8 code points that take > 3 bytes (above U+FFFF) to be invalid (since MySQL can't store them unless column is declared mb4) and encode them as ~ when false" do
+        encoded_string = Invoca::Utils::GuaranteedUTF8String.normalize_string(@string, replace_unicode_beyond_ffff: false)
 
-      assert_equal expected_string, encoded_string
-      assert_equal Encoding::UTF_8, encoded_string.encoding
-    end
+        assert_equal @string, encoded_string
+        assert_equal Encoding::UTF_8, encoded_string.encoding
+      end
 
-    should "encode all 255 UTF-8 characters, returning ~ when the character isn't mapped in CP1252" do
-      all_8_bit_characters = (1..255).map { |char| char.chr }.join
+      should "consider UTF-8 code points that take > 3 bytes (above U+FFFF) to be invalid (since MySQL can't store them unless column is declared mb4) and encode them as ~ when true" do
+        expected_string = "This string has some ✓ valid UTF-8 but also some ~ emoji ~ that are > U+FFFF"
 
-      final_utf_8_string = Invoca::Utils::GuaranteedUTF8String.normalize_string(all_8_bit_characters)
-      expected_string = "\u0001\u0002\u0003\u0004\u0005\u0006\u0007\u0008\u0009\u000A\u000B\u000C\u000A\u000E\u000F\u0010\u0011\u0012\u0013\u0014\u0015\u0016\u0017\u0018\u0019\u001A\u001B\u001C\u001D\u001E\u001F !\"\#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\u007F€~‚ƒ„…†‡ˆ‰Š‹Œ~Ž~~‘’“”•–—˜™š›œ~žŸ ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ"
+        encoded_string = Invoca::Utils::GuaranteedUTF8String.normalize_string(@string, replace_unicode_beyond_ffff: true)
 
-      assert_equal expected_string, final_utf_8_string
-    end
-
-    should "consider UTF-8 code points that take > 3 bytes (above U+FFFF) to be invalid (since MySQL can't store them unless column is declared mb4) and encode them as ~" do
-      string          = "This string has some ✓ valid UTF-8 but also some 😹 emoji \xf0\x9f\x98\xb9 that are > U+FFFF"
-      expected_string = "This string has some ✓ valid UTF-8 but also some ~ emoji ~ that are > U+FFFF"
-
-      encoded_string = Invoca::Utils::GuaranteedUTF8String.normalize_string(string)
-
-      assert_equal expected_string, encoded_string
-      assert_equal Encoding::UTF_8, encoded_string.encoding
+        assert_equal expected_string, encoded_string
+        assert_equal Encoding::UTF_8, encoded_string.encoding
+      end
     end
   end
 
@@ -118,6 +159,11 @@ class GuaranteedUTF8StringTest < Minitest::Test
 
       Invoca::Utils::GuaranteedUTF8String.new("").to_string
     end
+
+    should "do the same when using to_s alias" do
+      mock(Invoca::Utils::GuaranteedUTF8String).normalize_string("")
+
+      Invoca::Utils::GuaranteedUTF8String.new("").to_s
+    end
   end
 end
-
