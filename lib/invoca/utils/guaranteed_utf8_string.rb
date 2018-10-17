@@ -6,8 +6,8 @@ module Invoca
     class GuaranteedUTF8String
       def initialize(string)
         if string.is_a?(String) ||
-          (string.respond_to?(:to_s) &&
-           string.method(:to_s).owner != Kernel)  # the lame .to_s from Kernel just calls .inspect :(
+           (string.respond_to?(:to_s) &&
+            string.method(:to_s).owner != Kernel) # the lame .to_s from Kernel just calls .inspect :(
           @string = string.to_s
         else
           raise ArgumentError, "#{self.class} must be initialized with a string or an object with a non-Kernel .to_s method but instead was #{string.class} #{string.inspect}"
@@ -18,19 +18,17 @@ module Invoca
         @to_string ||= normalize_string(@string)
       end
 
-      alias_method :to_s, :to_string
+      alias to_s to_string
 
       private
 
       # chosen because this is a 1-byte ASCII character that is not used in any of the popular escaping systems: XML, HTML, HTTP URIs, HTTP Form Post, JSON
       REPLACE_CHARACTER = '~' unless defined?(REPLACE_CHARACTER)
 
-      def normalize_string(str)
-        str = @string.dup
+      def normalize_string(_orig_str)
+        str = @to_string.dup
         str.force_encoding('UTF-8')
-        if !str.valid_encoding?
-          cp1252_to_utf_8(str)
-        end
+        cp1252_to_utf_8(str) unless str.valid_encoding?
         normalize_newlines(str)
         remove_bom(str)
         replace_unicode_beyond_ffff(str)
@@ -45,9 +43,9 @@ module Invoca
         str.force_encoding('CP1252')
         str.encode!(
           'UTF-8',
-          replace: REPLACE_CHARACTER,
-          undef: :replace,
-          invalid: :replace
+          replace:  REPLACE_CHARACTER,
+          undef:    :replace,
+          invalid:  :replace
         )
       end
 
@@ -65,4 +63,3 @@ module Invoca
     end
   end
 end
-
