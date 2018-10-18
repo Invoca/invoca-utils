@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
-# This class expects to be initialized with a string and guarantees that the output of the to_string method is in UTF-8 format and fits in 3 bytes/char or less.
+# This class expects to be provides a normalize_string method that guarantees that the output of the to_string method is in UTF-8
+# format and fits in 3 bytes/char or less.
+#
+# [Deprecated] Equivalently, you can also create an instance of this class and call to_string or to_s on it.
 module Invoca
   module Utils
     class GuaranteedUTF8String
@@ -32,7 +35,7 @@ module Invoca
             if normalize_cp1252
               cp1252_to_utf_8(string)
             else
-              raise ArgumentError, "Could not normalize to utf8 due to invalid characters (possibly CP1252)"
+              raise ArgumentError, 'Could not normalize to utf8 due to invalid characters (possibly CP1252)'
             end
           end
           normalize_newlines(string)           if normalize_newlines
