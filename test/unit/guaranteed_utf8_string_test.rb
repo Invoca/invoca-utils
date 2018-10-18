@@ -55,43 +55,59 @@ class GuaranteedUTF8StringTest < Minitest::Test
         assert_equal Encoding::UTF_8, encoded_string.encoding
       end
 
-      UTF16_LE_BOM = "\xFF\xFE"
-      UTF16_BE_BOM = "\xFE\xFF"
+      context "normalize_utf16" do
+        UTF16_LE_BOM = "\xFF\xFE"
+        UTF16_BE_BOM = "\xFE\xFF"
+        UTF16_LE_TEST_STRING = (UTF16_LE_BOM + "v\x00a\x00l\x00i\x00d\x00,\x00u\x00t\x00f\x00-\x001\x006\x00\n\x00s\x00e\x00c\x00o\x00n\x00d\x00").force_encoding('BINARY').freeze
+        UTF16_BE_TEST_STRING = (UTF16_BE_BOM + "\x00v\x00a\x00l\x00i\x00d\x00,\x00u\x00t\x00f\x00-\x001\x006\x00\n\x00s\x00e\x00c\x00o\x00n\x00d").force_encoding('BINARY').freeze
 
-      should 'accept UTF-16LE in BINARY and return UTF-8 encoded string' do
-        original_string = (UTF16_LE_BOM + "v\x00a\x00l\x00i\x00d\x00,\x00u\x00t\x00f\x00-\x001\x006\x00\n\x00s\x00e\x00c\x00o\x00n\x00d\x00").force_encoding('BINARY')
+        should 'accept UTF-16LE in BINARY and return UTF-8 encoded string when true' do
+          encoded_string = Invoca::Utils::GuaranteedUTF8String.normalize_string(UTF16_LE_TEST_STRING, normalize_utf16: true)
 
-        encoded_string = Invoca::Utils::GuaranteedUTF8String.normalize_string(original_string)
+          assert_equal "valid,utf-16\nsecond", encoded_string
+          assert_equal Encoding::UTF_8, encoded_string.encoding
+        end
 
-        assert_equal "valid,utf-16\nsecond", encoded_string
-        assert_equal Encoding::UTF_8, encoded_string.encoding
-      end
+        should 'not check for UTF-16LE in BINARY and return UTF-8 encoded string when false' do
+          encoded_string = Invoca::Utils::GuaranteedUTF8String.normalize_string(UTF16_LE_TEST_STRING, normalize_utf16: false)
+          expected = "ÿþv\u0000a\u0000l\u0000i\u0000d\u0000,\u0000u\u0000t\u0000f\u0000-\u00001\u00006\u0000\n\u0000s\u0000e\u0000c\u0000o\u0000n\u0000d\u0000"
+          assert_equal expected, encoded_string
+          assert_equal Encoding::UTF_8, encoded_string.encoding
+        end
 
-      should 'accept UTF-16BE in BINARY and return UTF-8 encoded string' do
-        original_string = (UTF16_BE_BOM + "\x00v\x00a\x00l\x00i\x00d\x00,\x00u\x00t\x00f\x00-\x001\x006\x00\n\x00s\x00e\x00c\x00o\x00n\x00d").force_encoding('BINARY')
+        should 'accept UTF-16BE in BINARY and return UTF-8 encoded string when true' do
+          encoded_string = Invoca::Utils::GuaranteedUTF8String.normalize_string(UTF16_BE_TEST_STRING, normalize_utf16: true)
 
-        encoded_string = Invoca::Utils::GuaranteedUTF8String.normalize_string(original_string)
+          assert_equal "valid,utf-16\nsecond", encoded_string
+          assert_equal Encoding::UTF_8, encoded_string.encoding
+        end
 
-        assert_equal "valid,utf-16\nsecond", encoded_string
-        assert_equal Encoding::UTF_8, encoded_string.encoding
-      end
+        should 'not check for UTF-16BE in BINARY and return UTF-8 encoded string when false' do
+          encoded_string = Invoca::Utils::GuaranteedUTF8String.normalize_string(UTF16_BE_TEST_STRING, normalize_utf16: false)
+          expected = "þÿ\u0000v\u0000a\u0000l\u0000i\u0000d\u0000,\u0000u\u0000t\u0000f\u0000-\u00001\u00006\u0000\n\u0000s\u0000e\u0000c\u0000o\u0000n\u0000d"
+          assert_equal expected, encoded_string
+          assert_equal Encoding::UTF_8, encoded_string.encoding
+        end
 
-      should 'accept UTF-16LE in BINARY containing CP1252 and return UTF-8 encoded string' do
-        original_string = (UTF16_LE_BOM + "\x91\x00s\x00m\x00a\x00r\x00t\x00 \x00q\x00u\x00o\x00t\x00e\x00s\x00\x92\x00\n\x00s\x00e\x00c\x00o\x00n\x00d\x00").force_encoding('BINARY')
+        context "containing embedded CP1252" do
+          should 'accept UTF-16LE in BINARY and return UTF-8 encoded string when true' do
+            original_string = (UTF16_LE_BOM + "\x91\x00s\x00m\x00a\x00r\x00t\x00 \x00q\x00u\x00o\x00t\x00e\x00s\x00\x92\x00\n\x00s\x00e\x00c\x00o\x00n\x00d\x00").force_encoding('BINARY')
 
-        encoded_string = Invoca::Utils::GuaranteedUTF8String.normalize_string(original_string)
+            encoded_string = Invoca::Utils::GuaranteedUTF8String.normalize_string(original_string, normalize_utf16: true)
 
-        assert_equal "‘smart quotes’\nsecond", encoded_string
-        assert_equal Encoding::UTF_8, encoded_string.encoding
-      end
+            assert_equal "‘smart quotes’\nsecond", encoded_string
+            assert_equal Encoding::UTF_8, encoded_string.encoding
+          end
 
-      should 'accept UTF-16BE in BINARY containing CP1252 and return UTF-8 encoded string' do
-        original_string = (UTF16_BE_BOM + "\x00\x91\x00s\x00m\x00a\x00r\x00t\x00 \x00q\x00u\x00o\x00t\x00e\x00s\x00\x92\x00\n\x00s\x00e\x00c\x00o\x00n\x00d").force_encoding('BINARY')
+          should 'accept UTF-16BE in BINARY and return UTF-8 encoded string when true' do
+            original_string = (UTF16_BE_BOM + "\x00\x91\x00s\x00m\x00a\x00r\x00t\x00 \x00q\x00u\x00o\x00t\x00e\x00s\x00\x92\x00\n\x00s\x00e\x00c\x00o\x00n\x00d").force_encoding('BINARY')
 
-        encoded_string = Invoca::Utils::GuaranteedUTF8String.normalize_string(original_string)
+            encoded_string = Invoca::Utils::GuaranteedUTF8String.normalize_string(original_string, normalize_utf16: true)
 
-        assert_equal "‘smart quotes’\nsecond", encoded_string
-        assert_equal Encoding::UTF_8, encoded_string.encoding
+            assert_equal "‘smart quotes’\nsecond", encoded_string
+            assert_equal Encoding::UTF_8, encoded_string.encoding
+          end
+        end
       end
 
       context 'normalize_cp1252' do

@@ -21,7 +21,11 @@ module Invoca
       REPLACE_CHARACTER = '~'
 
       class << self
-        def normalize_string(orig_string, normalize_cp1252: true, normalize_newlines: true, remove_utf8_bom: true, replace_unicode_beyond_ffff: true)
+        def normalize_string(orig_string, normalize_utf16: true,
+                             normalize_cp1252:             true,
+                             normalize_newlines:           true,
+                             remove_utf8_bom:              true,
+                             replace_unicode_beyond_ffff:  true)
           string =  if orig_string.is_a?(String) ||
                       (orig_string.respond_to?(:to_s) &&
                         orig_string.method(:to_s).owner != Kernel) # the lame .to_s from Kernel just calls .inspect :(
@@ -30,7 +34,7 @@ module Invoca
                       raise ArgumentError, "must be passed a string or an object with a non-Kernel .to_s method but instead was #{orig_string.class} #{orig_string.inspect}"
                     end
           string.force_encoding('UTF-8')
-          normalize_utf_16(string)
+          normalize_utf_16(string)             if normalize_utf16
           unless string.valid_encoding?
             if normalize_cp1252
               cp1252_to_utf_8(string)
