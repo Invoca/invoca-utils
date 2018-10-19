@@ -21,7 +21,8 @@ module Invoca
       REPLACE_CHARACTER = '~'
 
       class << self
-        def normalize_string(orig_string, normalize_utf16: true,
+        def normalize_string(orig_string,
+                             normalize_utf16:              true,
                              normalize_cp1252:             true,
                              normalize_newlines:           true,
                              remove_utf8_bom:              true,
@@ -34,12 +35,32 @@ module Invoca
                       raise ArgumentError, "must be passed a string or an object with a non-Kernel .to_s method but instead was #{orig_string.class} #{orig_string.inspect}"
                     end
           string.force_encoding('UTF-8')
-          normalize_utf_16(string)             if normalize_utf16
-          unless string.valid_encoding?
-            if normalize_cp1252
-              cp1252_to_utf_8(string)
-            else
-              raise ArgumentError, 'Could not normalize to utf8 due to invalid characters (possibly CP1252)'
+          normalize_string_from_utf8(string,
+                                     normalize_utf16: normalize_utf16,
+                                     normalize_cp1252: normalize_cp1252,
+                                     normalize_newlines: normalize_newlines,
+                                     remove_utf8_bom: remove_utf8_bom,
+                                     replace_unicode_beyond_ffff: replace_unicode_beyond_ffff)
+        end
+
+        private
+
+        def normalize_string_from_utf8(string,
+                                       normalize_utf16:,
+                                       normalize_cp1252:,
+                                       normalize_newlines:,
+                                       remove_utf8_bom:,
+                                       replace_unicode_beyond_ffff:)
+          found_utf_16 = normalize_utf_16(string, normalize_cp1252: normalize_cp1252) if normalize_utf16
+          if found_utf_16
+            string.encode!('UTF-8')
+          else
+            unless string.valid_encoding?
+              if normalize_cp1252
+                cp1252_to_utf_8(string)
+              else
+                raise ArgumentError, 'Could not normalize to utf8 due to invalid characters (probably CP1252)'
+              end
             end
           end
           normalize_newlines(string)           if normalize_newlines
@@ -48,8 +69,6 @@ module Invoca
           string
         end
 
-        private
-
         UTF_16_LE_BOM = "\xFF\xFE"
         UTF_16_BE_BOM = "\xFE\xFF"
 
@@ -57,18 +76,20 @@ module Invoca
         PRIVATE_CP1252_CHAR_PATTERN_UTF_16LE = Regexp.new(PRIVATE_CP1252_CHAR_PATTERN.encode('UTF-16LE'))
         PRIVATE_CP1252_CHAR_PATTERN_UTF_16BE = Regexp.new(PRIVATE_CP1252_CHAR_PATTERN.encode('UTF-16BE'))
 
-        def normalize_utf_16(string)
+        # returns truthy iff UTF_16 was found, in which case it has been normalized but the string is still UTF-16
+        # otherwise returns falsey and leaves the string as is
+        def normalize_utf_16(string, normalize_cp1252:)
           case string[0, 2]
           when UTF_16_LE_BOM
             string.slice!(0, 2)                 # remove the BOM
             string.force_encoding('UTF-16LE')
-            normalize_multibyte_cp1252(string, PRIVATE_CP1252_CHAR_PATTERN_UTF_16LE, 'UTF-16LE')
-            string.encode!('UTF-8')
+            normalize_multibyte_cp1252(string, PRIVATE_CP1252_CHAR_PATTERN_UTF_16LE, 'UTF-16LE') if normalize_cp1252
+            true
           when UTF_16_BE_BOM
             string.slice!(0, 2)                 # remove the BOM
             string.force_encoding('UTF-16BE')
-            normalize_multibyte_cp1252(string, PRIVATE_CP1252_CHAR_PATTERN_UTF_16BE, 'UTF-16BE')
-            string.encode!('UTF-8')
+            normalize_multibyte_cp1252(string, PRIVATE_CP1252_CHAR_PATTERN_UTF_16BE, 'UTF-16BE') if normalize_cp1252
+            true
           end
         end
 
