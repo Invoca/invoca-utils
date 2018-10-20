@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# This class expects to be provides a normalize_string method that guarantees that the output of the to_string method is in UTF-8
-# format and fits in 3 bytes/char or less.
+# This class provides a normalize_string method that guarantees that its result is in valid UTF-8
+# format for Ruby and all versions of MySQL (using mb3 storage).
 #
 # [Deprecated] Equivalently, you can also create an instance of this class and call to_string or to_s on it.
 module Invoca
@@ -71,6 +71,7 @@ module Invoca
 
         UTF_16_LE_BOM = "\xFF\xFE"
         UTF_16_BE_BOM = "\xFE\xFF"
+        UTF_8_BOM     = "\xEF\xBB\xBF"
 
         PRIVATE_CP1252_CHAR_PATTERN = "[\u0080-\u009f]"
         PRIVATE_CP1252_CHAR_PATTERN_UTF_16LE = Regexp.new(PRIVATE_CP1252_CHAR_PATTERN.encode('UTF-16LE'))
@@ -112,7 +113,7 @@ module Invoca
         end
 
         def remove_utf8_bom(string)
-          string.sub!(/\A \xEF\xBB\xBF/x, '')
+          string.sub!(/\A #{UTF_8_BOM}/x, '')
         end
 
         # Note MySQL can only store Unicode up to code point U+FFFF in the standard mb3 storage type. There is an option to use mb4 which
@@ -120,7 +121,7 @@ module Invoca
         # it would take a data migration and didn't seem that important.
 
         def replace_unicode_beyond_ffff(string)
-          string.gsub!(/[^\u{0}-\u{ffff}]/x, REPLACE_CHARACTER)
+          string.gsub!(/[^\u0000-\uffff]/x, REPLACE_CHARACTER)
         end
       end
     end
