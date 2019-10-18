@@ -1,10 +1,7 @@
 require_relative '../test_helper'
 
 class UtilsTest < Minitest::Test
-  require 'invoca/utils'
-
   context "global namespace issues" do
-
     setup do
       setup_constant_overrides
     end
@@ -16,33 +13,42 @@ class UtilsTest < Minitest::Test
     context "when Diff is defined in the global namespace" do
       setup do
         set_test_const("Diff", Class.new)
+        load 'invoca/utils.rb'
       end
 
       should "not define Diff as Invoca::Utils::Diff" do
-        refute_equal Diff, Invoca::Utils::Diff
+        refute_equal ::Diff, Invoca::Utils::Diff
       end
     end
 
     context "when Diff is not defined in the global namespace" do
+      setup do
+        load 'invoca/utils.rb'
+      end
+
       should "define Diff as Invoca::Utils::Diff" do
-        assert_equal Diff, Invoca::Utils::Diff
+        assert_equal ::Diff, Invoca::Utils::Diff
       end
     end
 
     context "when Diffable is defined in the global namespace" do
       setup do
         set_test_const("Diffable", Class.new)
+        load 'invoca/utils.rb'
       end
 
-
       should "define Diffable as Invoca::Utils::Diffable" do
-        refute_equal Diffable, Invoca::Utils::Diffable
+        refute_equal ::Diffable, Invoca::Utils::Diffable
       end
     end
 
     context "when Diffable is not defined in the global namespace" do
+      setup do
+        load 'invoca/utils.rb'
+      end
+
       should "define Diffable as Diffable" do
-        assert_equal Diffable, Invoca::Utils::Diffable
+        assert_equal ::Diffable, Invoca::Utils::Diffable
       end
     end
   end
@@ -74,7 +80,11 @@ def set_test_const(const_name, value)
       parent_module == :never_defined and raise "You need to set each parent constant earlier! #{nested_const_name}"
       final_parent_module = parent_module
       final_const_name    = nested_const_name
-      parent_module.const_get(nested_const_name) rescue :never_defined
+      begin
+        parent_module.const_get(nested_const_name)
+      rescue
+        :never_defined
+      end
     end
 
   @constant_overrides << [final_parent_module, final_const_name, original_value]
