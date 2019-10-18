@@ -11,3 +11,11 @@ module Invoca
   module Utils
   end
 end
+
+unless defined?(Diff)
+  Diff = Invoca::Utils::Diff
+end
+
+unless defined?(Diffable)
+  Diffable = Invoca::Utils::Diffable
+end
