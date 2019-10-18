@@ -1,3 +1,8 @@
+PATH
+  remote: .
+  specs:
+    invoca-utils (0.0.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -37,6 +42,7 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.6)
+  invoca-utils!
   minitest
   pry
   rake
@@ -47,4 +53,4 @@ DEPENDENCIES
   tzinfo
 
 BUNDLED WITH
-   1.16.1
+   1.17.3

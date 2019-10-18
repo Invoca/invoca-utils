@@ -1,5 +1,4 @@
 require_relative '../test_helper'
-require_relative '../../lib/invoca/utils/stable_sort'
 
 class StableSortTest < Minitest::Test
   context "#stable_sort_by" do

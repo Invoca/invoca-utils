@@ -1,5 +1,4 @@
 require_relative '../test_helper'
-require_relative '../../lib/invoca/utils/map_compact'
 
 class MapCompactTest < Minitest::Test
   should "map_compact" do
