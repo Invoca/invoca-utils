@@ -1,5 +1,4 @@
 require_relative '../test_helper'
-require 'active_support/all'
 
 class TimeCalculationsTest < Minitest::Test
   context "beginning_of_hour" do
