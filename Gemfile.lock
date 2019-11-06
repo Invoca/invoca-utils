@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    invoca-utils (0.0.4)
+    invoca-utils (0.0.5)
 
 GEM
   remote: https://rubygems.org/

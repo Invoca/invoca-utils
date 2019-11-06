@@ -5,8 +5,8 @@ require 'invoca/utils/version'
 Gem::Specification.new do |spec|
   spec.name          = "invoca-utils"
   spec.version       = Invoca::Utils::VERSION
-  spec.authors       = ["Cary Penniman"]
-  spec.email         = ["cpenniman@invoca.com"]
+  spec.authors       = ["Invoca development"]
+  spec.email         = ["development@invoca.com"]
   spec.summary       = %q{A public collection of helpers used in multiple projects}
   spec.description   = %q{A public collection of helpers used in multiple projects}
   spec.homepage      = ""
