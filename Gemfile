@@ -10,5 +10,6 @@ group :development do
   gem 'pry'
   gem 'ruby-prof'
   gem 'minitest'
+  gem "minitest-reporters"
   gem 'tzinfo'
 end
