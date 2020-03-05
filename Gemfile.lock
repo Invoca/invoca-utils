@@ -41,7 +41,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler (~> 1.6)
   invoca-utils!
   minitest
   pry
