@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "invoca/utils/diff"
 require "invoca/utils/http"
 require "invoca/utils/map_compact"

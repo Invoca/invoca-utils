@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # adapted from http://users.cybercity.dk/~dsl8950/ruby/diff-0.3.tar.gz
 
 module Invoca
