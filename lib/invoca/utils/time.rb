@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Invoca ::Time extensions
 class ::Time
   def to_ms

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    invoca-utils (0.0.5)
+    invoca-utils (0.1.0.pre.2)
 
 GEM
   remote: https://rubygems.org/
@@ -41,7 +41,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler (~> 1.6)
   invoca-utils!
   minitest
   pry
