@@ -11,8 +11,10 @@ doc/
 lib/bundler/man
 pkg
 rdoc
+test/reports
 test/tmp
 test/version_tmp
+
 tmp
 *.bundle
 *.so
@@ -21,4 +23,3 @@ tmp
 mkmf.log
 .idea/
 .rubocop-http*
-test/reports/*
