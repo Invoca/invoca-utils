@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ::Enumerable
 
   # A stable sort will preserve the original order of two elements if their sort keys are identical.

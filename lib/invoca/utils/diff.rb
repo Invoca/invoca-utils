@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # adapted from http://users.cybercity.dk/~dsl8950/ruby/diff-0.3.tar.gz
 
 module Invoca
@@ -86,11 +88,11 @@ module Invoca
                   curr_diff = summary.shift
                 end
                 unless curr_diff && (curr_diff[1].first..curr_diff[1].last) === index
-                  result << "  #{format arg}\n" unless arg.nil? || options[:short_description]
+                  result += "  #{format arg}\n" unless arg.nil? || options[:short_description]
                 end
                 if curr_diff && curr_diff[1].first == index
                   verb, _a_range, _b_range, del, add = curr_diff
-                  result <<
+                  result +=
                     case verb
                     when 'd'
                       del.map { |t| "- #{format t}\n" }.join

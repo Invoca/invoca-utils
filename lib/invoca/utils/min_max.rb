@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ::Math
   def self.min *args
     args.min
