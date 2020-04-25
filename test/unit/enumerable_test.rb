@@ -8,7 +8,7 @@ class EnumerableTest < Minitest::Test
 
   context 'build_hash' do
     should 'convert arrays of [key, value] to a hash of { key => value }' do
-      assert_equal({ 'some' => 4, 'words' => 5 }, ['some', 'short', 'words'].build_hash { |s| [s, s.length] unless s == 'short' })
+      assert_equal({ 'some' => 4, 'short' => 5, 'words' => 5 }, ['some', 'short', 'words'].build_hash { |s| [s, s.length] })
     end
 
     should 'ignore nils returned from map' do

@@ -9,6 +9,10 @@ class ArrayTest < Minitest::Test
       assert_equal([4, 5, 5], ['some', 'short', 'words'].*.length)
     end
 
+    should 'handle methods with arguments' do
+      assert_equal(['om', 'ho', 'or'], ['some', 'short', 'words'].*.slice(1, 2))
+    end
+
     should 'not alter normal behavior (multiplication) when there is a right hand side to the expression' do
       assert_equal(['some', 'short', 'words', 'some', 'short', 'words'], ['some', 'short', 'words'] * 2)
     end
