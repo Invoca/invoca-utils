@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "invoca/utils/array"
+require "invoca/utils/enumerable"
 require "invoca/utils/diff"
 require "invoca/utils/http"
 require "invoca/utils/map_compact"
