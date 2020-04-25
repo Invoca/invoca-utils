@@ -24,8 +24,4 @@ module Enumerable
     end
 
   end
-
-  def *()
-    MultiSender.new(self, :map)
-  end
 end

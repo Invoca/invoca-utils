@@ -29,10 +29,4 @@ class EnumerableTest < Minitest::Test
       assert_equal({ 'some' => 4, nil => nil, 'words' => 5 }, ['some', 'short', 'words'].build_hash { |s| s == 'short' ? [] : [s, s.length] })
     end
   end
-
-  context '* operator' do
-    should 'call the same method on each item in an enumeration and return the results as an array' do
-      assert_equal([4, 5, 5], Set['some', 'short', 'words'].*.length)
-    end
-  end
 end
