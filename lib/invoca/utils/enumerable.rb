@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative './multi_sender'
+
 # Invoca ::Enumerable extensions
 module Enumerable
   def build_hash(res = {})
@@ -8,5 +10,9 @@ module Enumerable
       res[pair.first] = pair.last if pair
     end
     res
+  end
+
+  def *()
+    Invoca::Utils::MultiSender.new(self, :map)
   end
 end
