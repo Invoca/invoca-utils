@@ -12,7 +12,7 @@ module Enumerable
     res
   end
 
-  def *()
+  def *
     Invoca::Utils::MultiSender.new(self, :map)
   end
 end

@@ -36,7 +36,7 @@ class EnumerableTest < Minitest::Test
     end
 
     should 'call the same method on each item in an Hash and return the results as an array' do
-      assert_equal(['key1:value1', 'key2:value2'], {key1: 'value1', key2: 'value2'}.*.join(':'))
+      assert_equal(['key1:value1', 'key2:value2'], { key1: 'value1', key2: 'value2' }.*.join(':'))
     end
   end
 end

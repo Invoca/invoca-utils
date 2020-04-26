@@ -18,4 +18,3 @@ module Invoca
 end
 
 Array.prepend(Invoca::Utils::ArrayMultiply)
-

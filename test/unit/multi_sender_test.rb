@@ -23,7 +23,7 @@ class MultiSenderTest < Minitest::Test
     def each(&block)
       if block_given?
         block.call(@head)
-        @tail.each(&block) if @tail
+        @tail&.each(&block)
       else
         to_enum(:each)
       end
