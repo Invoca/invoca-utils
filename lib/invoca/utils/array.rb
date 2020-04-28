@@ -6,11 +6,11 @@ require_relative './multi_sender'
 # TODO: Once the hobo_support gem is no longer used by any of our code, use prepend instead of alias
 class Array
 
-  alias_method :multiply, :*
+  alias_method :original_multiply_operator, :*
 
   def *(rhs=nil)
     if rhs
-      multiply(rhs)
+      original_multiply_operator(rhs)
     else
       Invoca::Utils::MultiSender.new(self, :map)
     end
