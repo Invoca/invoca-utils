@@ -5,6 +5,7 @@ source 'https://rubygems.org'
 gemspec
 
 group :development do
+  gem 'activesupport', '~> 4.2'
   gem 'minitest'
   gem 'minitest-reporters'
   gem 'pry'
