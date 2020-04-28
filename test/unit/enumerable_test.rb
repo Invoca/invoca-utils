@@ -6,6 +6,44 @@ require_relative '../test_helper'
 
 class EnumerableTest < Minitest::Test
 
+  context 'map_and_find' do
+    should 'return the mapped value of the first match' do
+      assert_equal('FOUND 3', [1, 2, 3, 4].map_and_find { |v| 'FOUND 3' if v == 3 })
+    end
+
+    should 'return the mapped value of the first match, even if there are multiple matches' do
+      assert_equal('FOUND 3', [1, 2, 3, 4].map_and_find { |v| "FOUND #{v}" if v > 2 })
+    end
+
+    should 'return the provided argument if the value is not found' do
+      assert_equal('NOT FOUND', [1, 2, 3, 4].map_and_find('NOT FOUND') { |v| "FOUND 6" if v == 6 })
+    end
+
+    should 'return nil if the value is not found and no argument is provided' do
+      assert_nil([1, 2, 3, 4].map_and_find { |v| "FOUND 6" if v == 6 })
+    end
+  end
+
+  context 'map_with_index' do
+    should 'call the block with the value and index' do
+      assert_equal([10, 21, 32, 43], [10, 20, 30, 40].map_with_index { |v, index| v + index })
+    end
+
+    should 'assumulate into the provided enumerable' do
+      assert_equal([1, 10, 21, 32, 43], [10, 20, 30, 40].map_with_index([1]) { |v, index| v + index })
+    end
+  end
+
+  context 'map_hash' do
+    should 'convert enumerables into a hash using the value for key and the map result as the hash value' do
+      assert_equal({ 1 => 11, 2 => 12, 3 => 13 }, [1, 2, 3].map_hash { |v| v + 10  })
+    end
+
+    should 'includes nils returned from map' do
+      assert_equal({ 1 => 11, 2 => nil, 3 => 13 }, [1, 2, 3].map_hash { |v| v + 10 unless v == 2  })
+    end
+  end
+
   context 'build_hash' do
     should 'convert arrays of [key, value] to a hash of { key => value }' do
       assert_equal({ 'some' => 4, 'short' => 5, 'words' => 5 }, ['some', 'short', 'words'].build_hash { |s| [s, s.length] })
