@@ -6,9 +6,9 @@ require_relative './multi_sender'
 # TODO: Once the hobo_support gem is no longer used by any of our code, use prepend instead of alias
 class Array
 
-  alias_method :original_multiply_operator, :*
+  alias_method :original_multiply_operator, :* # rubocop:disable Style/Alias
 
-  def *(rhs=nil)
+  def *(rhs = nil)
     if rhs
       original_multiply_operator(rhs)
     else

@@ -27,7 +27,7 @@ class HashTest < Minitest::Test
 
   context 'partition_hash' do
     should 'return two hashes, the first contains the pairs with matching keys, the second contains the rest' do
-      assert_equal([{ 1 => 2, 3 => 4 }, { 6 => 5 }], { 1 => 2, 3 => 4, 6 => 5 }.partition_hash([1,3]))
+      assert_equal([{ 1 => 2, 3 => 4 }, { 6 => 5 }], { 1 => 2, 3 => 4, 6 => 5 }.partition_hash([1, 3]))
     end
 
     should 'return two hashes, the first contains the pairs with identified by the block, the second contains the rest' do
@@ -39,7 +39,7 @@ class HashTest < Minitest::Test
     end
 
     should 'handle all matches' do
-      assert_equal([{ 1 => 2, 3 => 4, 6 => 5 }, {}], { 1 => 2, 3 => 4, 6 => 5 }.partition_hash { |key, value| true })
+      assert_equal([{ 1 => 2, 3 => 4, 6 => 5 }, {}], { 1 => 2, 3 => 4, 6 => 5 }.partition_hash { |_key, _value| true })
     end
   end
 
