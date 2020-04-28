@@ -8,7 +8,7 @@ class HashWithIndifferentAccessTest < Minitest::Test
 
   context 'partition_hash' do
     setup do
-      @hash_to_test = HashWithIndifferentAccess.new( 'one' => 2, three: 4, 'six' => 5 )
+      @hash_to_test = HashWithIndifferentAccess.new('one' => 2, :three => 4, 'six' => 5)
     end
 
     should 'return two hashes, the first contains the pairs with matching keys, the second contains the rest' do
@@ -16,7 +16,7 @@ class HashWithIndifferentAccessTest < Minitest::Test
     end
 
     should 'return two hashes, the first contains the pairs with identified by the block, the second contains the rest' do
-      assert_equal([{ 'one' => 2, 'three' => 4 }, { 'six' => 5 }], @hash_to_test.partition_hash { |key, value| ['one', 'three'].include?(key) })
+      assert_equal([{ 'one' => 2, 'three' => 4 }, { 'six' => 5 }], @hash_to_test.partition_hash { |key, _value| ['one', 'three'].include?(key) })
     end
 
     should 'handle no matches' do
@@ -24,7 +24,7 @@ class HashWithIndifferentAccessTest < Minitest::Test
     end
 
     should 'handle all matches' do
-      assert_equal([@hash_to_test, {}], @hash_to_test.partition_hash { |key, value| true })
+      assert_equal([@hash_to_test, {}], @hash_to_test.partition_hash { |_key, _value| true })
     end
 
     should 'handle symbols for key matching' do
@@ -40,7 +40,7 @@ class HashWithIndifferentAccessTest < Minitest::Test
 
   context '- operator' do
     setup do
-      @hash_to_test = HashWithIndifferentAccess.new( 'one' => 2, three: 4, 'six' => 5 )
+      @hash_to_test = HashWithIndifferentAccess.new('one' => 2, three: 4, 'six' => 5)
     end
 
     should 'return a hash with pairs removed that match the keys in rhs array' do
@@ -70,7 +70,7 @@ class HashWithIndifferentAccessTest < Minitest::Test
 
   context '& operator' do
     setup do
-      @hash_to_test = HashWithIndifferentAccess.new( 'one' => 2, three: 4, 'six' => 5 )
+      @hash_to_test = HashWithIndifferentAccess.new('one' => 2, three: 4, 'six' => 5)
     end
 
     should 'return a hash with pairs removed that do NOT match the keys in rhs array' do
