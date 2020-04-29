@@ -4,7 +4,7 @@ Inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Note: This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.3.0] - Unreleased
+## [0.3.0] - 2020-04-28
 ### Added
 - Array::* operator changed to use alias_method instead of prepend to prevent infinite recursion when HoboSupport gem is present
 - Enumerable::map_and_find, map_with_index, and map_hash methods ported from HoboSupport
