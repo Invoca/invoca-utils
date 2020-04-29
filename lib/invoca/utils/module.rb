@@ -3,7 +3,7 @@
 class Module
 
   # Custom alias_method_chain that won't cause infinite recursion if called twice.
-  # NOTE: Calling alias_method_chain on alias_method_chain was just way to confusing, so I copied it :-/
+  # NOTE: Calling alias_method_chain on alias_method_chain was just way too confusing, so I copied it :-/
   def alias_method_chain(target, feature)
     # Strip out punctuation on predicates, bang or writer methods since
     # e.g. target?_without_feature is not a valid method name.
