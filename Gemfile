@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 
 gemspec
 
-group :development do
+source 'https://rubygems.org' do
   gem 'activesupport', '~> 4.2'
   gem 'minitest'
   gem 'minitest-reporters'
@@ -15,4 +15,8 @@ group :development do
   gem 'shoulda',   '= 3.5.0'
   gem 'test-unit', '= 1.2.3'
   gem 'tzinfo'
+end
+
+source 'https://gem.fury.io/invoca' do
+  gem 'test_overrides',      '~> 0.13'
 end

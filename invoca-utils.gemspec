@@ -1,4 +1,4 @@
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'invoca/utils/version'
 
@@ -7,8 +7,7 @@ Gem::Specification.new do |spec|
   spec.version       = Invoca::Utils::VERSION
   spec.authors       = ["Invoca development"]
   spec.email         = ["development@invoca.com"]
-  spec.summary       = %q{A public collection of helpers used in multiple projects}
-  spec.description   = %q{A public collection of helpers used in multiple projects}
+  spec.summary       = "A public collection of helpers used in multiple projects"
   spec.homepage      = ""
   spec.license       = "MIT"
 
