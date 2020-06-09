@@ -4,7 +4,7 @@ Inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Note: This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.4.0] - Unreleased
+## [0.4.0] - 2020-06-09
 ### Added
 - Added `Invoca::Utils.retry_on_exception`.
 - Added `Invoca::Utils::GuaranteedUTF8String.normalize_all_strings` to normalize
