@@ -5,16 +5,29 @@ require_relative '../test_helper'
 class ExceptionsTest < Minitest::Test
   context "exceptions" do
     context ".retry_on_exception" do
+      should "default retries: to 1" do
+        times = 0
+        tries = []
+        result = Invoca::Utils.retry_on_exception(ArgumentError) do |try|
+          tries << try
+          times += 1
+        end
+        assert_equal 1, result
+        assert_equal [0], tries
+      end
+
       context "when never raising an exception" do
         should "return result" do
           times = 0
           tries = []
-          result = Invoca::Utils.retry_on_exception(ArgumentError, retries: 1) do |try|
+          result = Invoca::Utils.retry_on_exception(ArgumentError, retries: 2) do |try|
             tries << try
             times += 1
+            try == 0 and raise ArgumentError, '!!!'
+            times
           end
-          assert_equal 1, result
-          assert_equal [0], tries
+          assert_equal 2, result
+          assert_equal [0, 1], tries
         end
       end
 

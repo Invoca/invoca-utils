@@ -11,7 +11,7 @@ module Invoca
       # @param [Integer] retries: - 1+ count of retries (1 retry = up to 2 tries total)
       # @param [Proc] before_retry - optional proc which is called before each retry, with the exception passed as a block param
       # @return the value from yield
-      def retry_on_exception(exception_classes, retries:, before_retry: nil)
+      def retry_on_exception(exception_classes, retries: 1, before_retry: nil)
         retries.times do |attempt_number|
           return yield(attempt_number)
         rescue *Array(exception_classes) => ex

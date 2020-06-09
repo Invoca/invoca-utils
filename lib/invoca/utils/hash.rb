@@ -2,7 +2,6 @@
 
 # Invoca ::Hash extensions
 class Hash
-
   def select_hash(&block)
     res = {}
     each { |k, v| res[k] = v if (block.arity == 1 ? yield(v) : yield(k, v)) } # rubocop:disable Style/ParenthesesAroundCondition
