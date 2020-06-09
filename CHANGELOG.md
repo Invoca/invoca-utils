@@ -7,6 +7,8 @@ Note: This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0
 ## [0.4.0] - Unreleased
 ### Added
 - Added `Invoca::Utils.retry_on_exception`.
+- Added `Invoca::Utils::GuaranteedUTF8String.normalize_all_strings` to normalize
+  all strings found in a JSON doc of hashes, arrays, and values.
 
 ## [0.3.0] - 2020-04-28
 ### Added
