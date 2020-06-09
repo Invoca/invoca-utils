@@ -221,6 +221,29 @@ class GuaranteedUTF8StringTest < Minitest::Test
           assert_equal Encoding::UTF_8, encoded_string.encoding
         end
       end
+
+      context ".normalize_strings" do
+        should "walk json doc, replacing strings in: values, inside array elements, and hash keys and values" do
+          json_doc = {
+            '😹' => "\xE2\x9C\x93 laughing cat",
+            ['😹'] => ["\xE2", "\xf0\x9f\x98\xb9", { "newline" => "\r\n" }],
+            'cp1252' => "\x91smart quotes\x92"
+          }
+
+          normalized_json = Invoca::Utils::GuaranteedUTF8String.normalize_all_strings(json_doc,
+                                                                                      normalize_utf16:              true,
+                                                                                      normalize_cp1252:             true,
+                                                                                      normalize_newlines:           true,
+                                                                                      remove_utf8_bom:              true,
+                                                                                      replace_unicode_beyond_ffff:  true)
+
+          assert_equal({
+                         '~' => "✓ laughing cat",
+                         ['~'] => ["â", "~", { "newline" => "\n" }],
+                         'cp1252' => "‘smart quotes’"
+                       }, normalized_json)
+        end
+      end
     end
 
     context 'constructor' do

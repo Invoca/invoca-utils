@@ -21,6 +21,7 @@ module Invoca
       REPLACE_CHARACTER = '~'
 
       class << self
+        # normalizes a string to UTF-8
         def normalize_string(orig_string,
                              normalize_utf16:              true,
                              normalize_cp1252:             true,
@@ -43,6 +44,22 @@ module Invoca
                                      replace_unicode_beyond_ffff: replace_unicode_beyond_ffff)
         end
 
+        # Walks a JSON doc of hashes, arrays, and values and normalizes all strings found to UTF-8
+        def normalize_all_strings(value, **options)
+          case value
+          when Hash
+            value.each_with_object({}) do |(k, v), result|
+              result[normalize_all_strings(k, **options)] = normalize_all_strings(v, **options)
+            end
+          when Array
+            value.map { |v| normalize_all_strings(v, **options) }
+          when String
+            normalize_string(value, **options)
+          else
+            value
+          end
+        end
+
         private
 
         def normalize_string_from_utf8(string,
@@ -54,13 +71,11 @@ module Invoca
           found_utf_16 = normalize_utf_16(string, normalize_cp1252: normalize_cp1252) if normalize_utf16
           if found_utf_16
             string.encode!('UTF-8')
-          else
-            unless string.valid_encoding?
-              if normalize_cp1252
-                cp1252_to_utf_8(string)
-              else
-                raise ArgumentError, 'Could not normalize to utf8 due to invalid characters (probably CP1252)'
-              end
+          elsif !string.valid_encoding?
+            if normalize_cp1252
+              cp1252_to_utf_8(string)
+            else
+              raise ArgumentError, 'Could not normalize to utf8 due to invalid characters (probably CP1252)'
             end
           end
           normalize_newlines(string)           if normalize_newlines
