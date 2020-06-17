@@ -13,9 +13,11 @@ module Invoca
       # @return the value from yield
       def retry_on_exception(exception_classes, retries: 1, before_retry: nil)
         retries.times do |attempt_number|
-          return yield(attempt_number)
-        rescue *Array(exception_classes) => ex
-          before_retry&.call(ex)
+          begin
+            return yield(attempt_number)
+          rescue *Array(exception_classes) => ex
+            before_retry&.call(ex)
+          end
         end
 
         yield(retries)   # no rescue for this last try, so any exceptions will raise out

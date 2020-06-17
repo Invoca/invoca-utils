@@ -4,6 +4,10 @@ Inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Note: This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.1] - 2020-06-17
+### Fixed
+- Support Ruby < 2.5 by adding `begin`/`end` around `rescue` in `retry_on_exception`. 
+
 ## [0.4.0] - 2020-06-09
 ### Added
 - Added `Invoca::Utils.retry_on_exception`.
