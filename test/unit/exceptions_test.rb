@@ -2,22 +2,22 @@
 
 require_relative '../test_helper'
 
-class ExceptionsTest < Minitest::Test
+describe Invoca::Utils do
   context "exceptions" do
     context ".retry_on_exception" do
-      should "default retries: to 1" do
+      it "default retries: to 1" do
         times = 0
         tries = []
         result = Invoca::Utils.retry_on_exception(ArgumentError) do |try|
           tries << try
           times += 1
         end
-        assert_equal 1, result
-        assert_equal [0], tries
+        expect(result).to eq(1)
+        expect(tries).to eq([0])
       end
 
       context "when never raising an exception" do
-        should "return result" do
+        it "return result" do
           times = 0
           tries = []
           result = Invoca::Utils.retry_on_exception(ArgumentError, retries: 2) do |try|
@@ -26,26 +26,26 @@ class ExceptionsTest < Minitest::Test
             try == 0 and raise ArgumentError, '!!!'
             times
           end
-          assert_equal 2, result
-          assert_equal [0, 1], tries
+          expect(result).to eq(2)
+          expect(tries).to eq([0,1])
         end
       end
 
       context "when always raising an exception" do
-        should "retry and finally raise" do
+        it "retry and finally raise" do
           tries = []
-          assert_raises(ArgumentError, /!!! 2/) do
+          expect do
             Invoca::Utils.retry_on_exception(ArgumentError, retries: 1) do |try|
               tries << try
               raise ArgumentError, "!!! #{try + 1}"
             end
-          end
-          assert_equal [0, 1], tries
+          end.to raise_exception(ArgumentError, /!!! 2/)
+          expect(tries).to eq([0,1])
         end
       end
 
       context "when raising but then succeeding" do
-        should "retry and finally return result" do
+        it "retry and finally return result" do
           times = 0
           result = Invoca::Utils.retry_on_exception(ArgumentError, retries: 1) do
             times += 1
@@ -55,12 +55,12 @@ class ExceptionsTest < Minitest::Test
               times
             end
           end
-          assert_equal 2, result
+          expect(result).to eq(2)
         end
       end
 
       context "when raising different exceptions (array notation) but then succeeding" do
-        should "retry and finally return result" do
+        it "retry and finally return result" do
           times = 0
           tries = []
           result = Invoca::Utils.retry_on_exception([ArgumentError, RuntimeError], retries: 2) do |try|
@@ -75,8 +75,8 @@ class ExceptionsTest < Minitest::Test
               times
             end
           end
-          assert_equal 3, result
-          assert_equal [0, 1, 2], tries
+          expect(result).to eq(3)
+          expect(tries).to eq([0, 1, 2])
         end
       end
     end
