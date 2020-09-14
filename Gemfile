@@ -11,6 +11,8 @@ source 'https://rubygems.org' do
   gem 'pry'
   gem 'rake'
   gem 'rr',        '=1.1.2'
+  gem 'rspec'
+  gem 'rspec_junit_formatter'
   gem 'ruby-prof'
   gem 'shoulda',   '= 3.5.0'
   gem 'test-unit', '= 1.2.3'
