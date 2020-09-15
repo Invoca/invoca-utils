@@ -4,97 +4,97 @@ require 'active_support/hash_with_indifferent_access'
 require_relative '../../lib/invoca/utils/hash_with_indifferent_access.rb'
 require_relative '../test_helper'
 
-class HashWithIndifferentAccessTest < Minitest::Test
+describe HashWithIndifferentAccess do
 
   context 'partition_hash' do
-    setup do
+    before do
       @hash_to_test = HashWithIndifferentAccess.new('one' => 2, :three => 4, 'six' => 5)
     end
 
-    should 'return two hashes, the first contains the pairs with matching keys, the second contains the rest' do
-      assert_equal([{ 'one' => 2, 'three' => 4 }, { 'six' => 5 }], @hash_to_test.partition_hash(['one', 'three']))
+    it 'return two hashes, the first contains the pairs with matching keys, the second contains the rest' do
+      expect(@hash_to_test.partition_hash(['one', 'three'])).to eq([{ 'one' => 2, 'three' => 4 }, { 'six' => 5 }])
     end
 
-    should 'return two hashes, the first contains the pairs with identified by the block, the second contains the rest' do
-      assert_equal([{ 'one' => 2, 'three' => 4 }, { 'six' => 5 }], @hash_to_test.partition_hash { |key, _value| ['one', 'three'].include?(key) })
+    it 'return two hashes, the first contains the pairs with identified by the block, the second contains the rest' do
+      expect(@hash_to_test.partition_hash { |key, _value| ['one', 'three'].include?(key) }).to eq([{ 'one' => 2, 'three' => 4 }, { 'six' => 5 }])
     end
 
-    should 'handle no matches' do
-      assert_equal([{}, @hash_to_test], @hash_to_test.partition_hash([:not_found]))
+    it 'handle no matches' do
+      expect(@hash_to_test.partition_hash([:not_found])).to eq([{}, @hash_to_test])
     end
 
-    should 'handle all matches' do
-      assert_equal([@hash_to_test, {}], @hash_to_test.partition_hash { |_key, _value| true })
+    it 'handle all matches' do
+      expect(@hash_to_test.partition_hash { |_key, _value| true }).to eq([@hash_to_test, {}])
     end
 
-    should 'handle symbols for key matching' do
-      assert_equal([{ 'one' => 2, 'three' => 4 }, { 'six' => 5 }], @hash_to_test.partition_hash([:one, :three]))
+    it 'handle symbols for key matching' do
+      expect(@hash_to_test.partition_hash([:one, :three])).to eq([{ 'one' => 2, 'three' => 4 }, { 'six' => 5 }])
     end
 
-    should 'return HashWithIndifferentAccess objects' do
+    it 'return HashWithIndifferentAccess objects' do
       matched, unmatched = @hash_to_test.partition_hash([:one, :three])
-      assert(matched.is_a?(HashWithIndifferentAccess))
-      assert(unmatched.is_a?(HashWithIndifferentAccess))
+      expect(matched.is_a?(HashWithIndifferentAccess)).to be_truthy
+      expect(unmatched.is_a?(HashWithIndifferentAccess)).to be_truthy
     end
   end
 
   context '- operator' do
-    setup do
+    before do
       @hash_to_test = HashWithIndifferentAccess.new('one' => 2, :three => 4, 'six' => 5)
     end
 
-    should 'return a hash with pairs removed that match the keys in rhs array' do
-      assert_equal({ 'three' => 4 }, @hash_to_test - ['one', 'six'])
+    it 'return a hash with pairs removed that match the keys in rhs array' do
+      expect(@hash_to_test - ['one', 'six']).to eq({ 'three' => 4 })
     end
 
-    should 'handle empty rhs array' do
-      assert_equal(@hash_to_test, @hash_to_test - [])
+    it 'handle empty rhs array' do
+      expect(@hash_to_test - []).to eq(@hash_to_test)
     end
 
-    should 'handle no matches in rhs array' do
-      assert_equal(@hash_to_test, @hash_to_test - ['100', '600'])
+    it 'handle no matches in rhs array' do
+      expect(@hash_to_test - ['100', '600']).to eq(@hash_to_test)
     end
 
-    should 'handle all matches in rhs array' do
-      assert_equal({}, @hash_to_test - ['one', 'three', 'six'])
+    it 'handle all matches in rhs array' do
+      expect(@hash_to_test - ['one', 'three', 'six']).to eq({})
     end
 
-    should 'handle symbols for key matching' do
-      assert_equal({ 'six' => 5 }, @hash_to_test - [:one, :three])
+    it 'handle symbols for key matching' do
+      expect(@hash_to_test - [:one, :three]).to eq({ 'six' => 5 })
     end
 
-    should 'return HashWithIndifferentAccess object' do
-      assert((@hash_to_test - [:one, :three]).is_a?(HashWithIndifferentAccess))
+    it 'return HashWithIndifferentAccess object' do
+      expect((@hash_to_test - [:one, :three]).is_a?(HashWithIndifferentAccess)).to be_truthy
     end
   end
 
   context '& operator' do
-    setup do
+    before do
       @hash_to_test = HashWithIndifferentAccess.new('one' => 2, :three => 4, 'six' => 5)
     end
 
-    should 'return a hash with pairs removed that do NOT match the keys in rhs array' do
-      assert_equal({ 'one' => 2, 'six' => 5 }, @hash_to_test & ['one', 'six'])
+    it 'return a hash with pairs removed that do NOT match the keys in rhs array' do
+      expect(@hash_to_test & ['one', 'six']).to eq({ 'one' => 2, 'six' => 5 })
     end
 
-    should 'handle empty rhs array' do
-      assert_equal({}, @hash_to_test & [])
+    it 'handle empty rhs array' do
+      expect(@hash_to_test & []).to eq({})
     end
 
-    should 'handle no matches in rhs array' do
-      assert_equal({}, @hash_to_test & ['100', '600'])
+    it 'handle no matches in rhs array' do
+      expect(@hash_to_test & ['100', '600']).to eq({})
     end
 
-    should 'handle all matches in rhs array' do
-      assert_equal(@hash_to_test, @hash_to_test & ['one', 'three', 'six'])
+    it 'handle all matches in rhs array' do
+      expect(@hash_to_test & ['one', 'three', 'six']).to eq(@hash_to_test)
     end
 
-    should 'handle symbols for key matching' do
-      assert_equal({ 'one' => 2, 'three' => 4 }, @hash_to_test & [:one, :three])
+    it 'handle symbols for key matching' do
+      expect(@hash_to_test & [:one, :three]).to eq({ 'one' => 2, 'three' => 4 })
     end
 
-    should 'return HashWithIndifferentAccess object' do
-      assert((@hash_to_test & [:one, :three]).is_a?(HashWithIndifferentAccess))
+    it 'return HashWithIndifferentAccess object' do
+      expect((@hash_to_test & [:one, :three]).is_a?(HashWithIndifferentAccess)).to be_truthy
     end
   end
 end
