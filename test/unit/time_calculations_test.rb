@@ -2,7 +2,7 @@
 
 require_relative '../test_helper'
 
-class TimeCalculationsTest < Minitest::Test
+describe Time do
   context "beginning_of_hour" do
     Time.zone = 'Pacific Time (US & Canada)'
     [
@@ -13,27 +13,27 @@ class TimeCalculationsTest < Minitest::Test
       Time.local(2001,12,31,23,59),
       Time.local(1970,1,1)
     ].each_with_index do |time, index|
-      should "give back a time with no minutes, seconds, or msec: #{time} (#{index})" do
+      it "give back a time with no minutes, seconds, or msec: #{time} (#{index})" do
         t = time.beginning_of_hour
-        assert_equal t.year,  time.year
-        assert_equal t.month, time.month
-        assert_equal t.day,   time.day
-        assert_equal t.hour,  time.hour
-        assert_equal 0, t.min
-        assert_equal 0, t.sec
-        assert_equal 0, t.usec
+        expect(time.year).to eq(t.year)
+        expect(time.month).to eq(t.month)
+        expect(time.day).to eq(t.day)
+        expect(time.hour).to eq(t.hour)
+        expect(t.min).to eq(0)
+        expect(t.sec).to eq(0)
+        expect(t.usec).to eq(0)
       end
     end
   end
 
   context "end_of_day_whole_sec" do
-    should "return the end of day with whole_sec" do
+    it "return the end of day with whole_sec" do
       t = Time.now
       end_of_day = t.end_of_day
       end_whole_sec = t.end_of_day_whole_sec
-      assert_equal 0.0, end_whole_sec.usec
-      assert_equal end_of_day.to_i, end_whole_sec.to_i
-      assert_equal end_of_day.sec, end_whole_sec.sec
+      expect(end_whole_sec.usec).to eq(0.0)
+      expect(end_whole_sec.to_i).to eq(end_of_day.to_i)
+      expect(end_whole_sec.sec).to eq(end_of_day.sec)
     end
   end
 end
