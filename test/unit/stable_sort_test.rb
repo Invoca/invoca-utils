@@ -2,37 +2,37 @@
 
 require_relative '../test_helper'
 
-class StableSortTest < Minitest::Test
+describe Enumerable do
   context "#stable_sort_by" do
-    should "preserve the original order if all sort the same" do
+    it "preserve the original order if all sort the same" do
       list_to_sort = [:b, :d, :c, :a, :e, :f]
 
-      assert_equal list_to_sort, list_to_sort.stable_sort_by { |c| 0 }
+      expect(list_to_sort.stable_sort_by { |c| 0 }).to eq(list_to_sort)
     end
 
-    should "order by keys first and then position" do
+    it "order by keys first and then position" do
       list_to_sort = [:b, :d, :c, :a, :e, :f]
       order = [:a, :b, :c]
 
       result = list_to_sort.stable_sort_by { |c| order.index(c) || order.length }
-      assert_equal [:a, :b, :c, :d, :e, :f], result
+      expect(result).to eq([:a, :b, :c, :d, :e, :f])
     end
 
-    should "order by keys only if needed" do
+    it "order by keys only if needed" do
       list_to_sort = [:b, :d, :c, :a, :e, :f]
       result = list_to_sort.stable_sort_by { |c| c.to_s }
-      assert_equal [:a, :b, :c, :d, :e, :f], result
+      expect(result).to eq([:a, :b, :c, :d, :e, :f])
     end
   end
 
   context "stable_sort" do
-    should "preserve the original order if all sort the same" do
+    it "preserve the original order if all sort the same" do
       list_to_sort = [:b, :d, :c, :a, :e, :f]
 
-      assert_equal list_to_sort, list_to_sort.stable_sort { |first, second| 0 }
+      expect(list_to_sort.stable_sort { |first, second| 0 }).to eq(list_to_sort)
     end
 
-    should "order by keys first and then position" do
+    it "order by keys first and then position" do
       list_to_sort = [:b, :d, :c, :a, :e, :f]
       order = [:a, :b, :c]
 
@@ -42,13 +42,13 @@ class StableSortTest < Minitest::Test
         first_pos <=> second_pos
       end
 
-      assert_equal [:a, :b, :c, :d, :e, :f], result
+      expect(result).to eq([:a, :b, :c, :d, :e, :f])
     end
 
-    should "order by keys only if needed" do
+    it "order by keys only if needed" do
       list_to_sort = [:b, :d, :c, :a, :e, :f]
       result = list_to_sort.stable_sort{ |first, second| first.to_s <=> second.to_s }
-      assert_equal [:a, :b, :c, :d, :e, :f], result
+      expect(result).to eq([:a, :b, :c, :d, :e, :f])
     end
   end
 end
