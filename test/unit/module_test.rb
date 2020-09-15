@@ -5,7 +5,7 @@ require 'active_support/core_ext/module/aliasing'
 require_relative '../../lib/invoca/utils/module.rb'
 require_relative '../test_helper'
 
-class ModuleTest < Minitest::Test
+describe Module do
   class NumberFun
     def self.around_filter(around_method, method_names)
       method_names.each do |meth|
@@ -32,8 +32,8 @@ class ModuleTest < Minitest::Test
   end
 
   context 'alias_method_chain' do
-    should 'not cause infinite recursion when double aliasing the same method' do
-      assert_equal(4, NumberFun.new.number_printer(3))
+    it 'not cause infinite recursion when double aliasing the same method' do
+      expect(NumberFun.new.number_printer(3)).to eq(4)
     end
   end
 end
