@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../../lib/invoca/utils/guaranteed_utf8_string'
-require_relative '../test_helper'
+require_relative '../spec_helper'
 
 describe Invoca::Utils::GuaranteedUTF8String do
   class HasNoTo_sMethod

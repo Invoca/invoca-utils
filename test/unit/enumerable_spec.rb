@@ -2,7 +2,7 @@
 
 require 'set'
 require_relative '../../lib/invoca/utils/enumerable.rb'
-require_relative '../test_helper'
+require_relative '../spec_helper'
 
 describe Enumerable do
 

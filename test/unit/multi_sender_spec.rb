@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../../lib/invoca/utils/multi_sender.rb'
-require_relative '../test_helper'
+require_relative '../spec_helper'
 
 describe Invoca::Utils::MultiSender do
   # create enumerable class for testing

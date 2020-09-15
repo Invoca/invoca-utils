@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../../lib/invoca/utils/array.rb'
-require_relative '../test_helper'
+require_relative '../spec_helper'
 
 describe Array do
   context '* operator' do

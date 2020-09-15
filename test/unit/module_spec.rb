@@ -3,7 +3,7 @@
 # must require active_support's alias_method_chain first, to ensure that our module monkey patches it
 require 'active_support/core_ext/module/aliasing'
 require_relative '../../lib/invoca/utils/module.rb'
-require_relative '../test_helper'
+require_relative '../spec_helper'
 
 describe Module do
   class NumberFun

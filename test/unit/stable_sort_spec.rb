@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../test_helper'
+require_relative '../spec_helper'
 
 describe Enumerable do
   context "#stable_sort_by" do

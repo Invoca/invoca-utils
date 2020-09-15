@@ -2,7 +2,7 @@
 
 require 'active_support/hash_with_indifferent_access'
 require_relative '../../lib/invoca/utils/hash_with_indifferent_access.rb'
-require_relative '../test_helper'
+require_relative '../spec_helper'
 
 describe HashWithIndifferentAccess do
 
