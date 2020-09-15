@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'rr'
-require 'shoulda'
 require 'pry'
 require 'active_support/all'
 
