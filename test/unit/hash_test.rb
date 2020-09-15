@@ -3,79 +3,79 @@
 require_relative '../../lib/invoca/utils/hash.rb'
 require_relative '../test_helper'
 
-class HashTest < Minitest::Test
+describe Hash do
 
   context 'select_hash' do
-    should 'return a hash containing key/values identified by the block' do
-      assert_equal({ 1 => 2, 3 => 4 }, { 1 => 2, 3 => 4, 6 => 5 }.select_hash { |key, value| key < value })
+    it 'return a hash containing key/values identified by the block' do
+      expect({ 1 => 2, 3 => 4, 6 => 5 }.select_hash { |key, value| key < value }).to eq({ 1 => 2, 3 => 4 })
     end
 
-    should 'handle blocks that only check values' do
-      assert_equal({ 3 => 4, 6 => 5 }, { 1 => 2, 3 => 4, 6 => 5 }.select_hash { |value| value != 2 })
+    it 'handle blocks that only check values' do
+      expect({ 1 => 2, 3 => 4, 6 => 5 }.select_hash { |value| value != 2 }).to eq({ 3 => 4, 6 => 5 })
     end
   end
 
   context 'map_hash' do
-    should 'return a hash containing values updated by the block' do
-      assert_equal({ 1 => true, 3 => true, 6 => false }, { 1 => 2, 3 => 4, 6 => 5 }.map_hash { |key, value| key < value })
+    it 'return a hash containing values updated by the block' do
+      expect({ 1 => 2, 3 => 4, 6 => 5 }.map_hash { |key, value| key < value }).to eq({ 1 => true, 3 => true, 6 => false })
     end
 
-    should 'handle blocks that only receive values' do
-      assert_equal({ 1 => 4, 3 => 8, 6 => 10 }, { 1 => 2, 3 => 4, 6 => 5 }.map_hash { |value| value * 2 })
+    it 'handle blocks that only receive values' do
+      expect({ 1 => 2, 3 => 4, 6 => 5 }.map_hash { |value| value * 2 }).to eq({ 1 => 4, 3 => 8, 6 => 10 })
     end
   end
 
   context 'partition_hash' do
-    should 'return two hashes, the first contains the pairs with matching keys, the second contains the rest' do
-      assert_equal([{ 1 => 2, 3 => 4 }, { 6 => 5 }], { 1 => 2, 3 => 4, 6 => 5 }.partition_hash([1, 3]))
+    it 'return two hashes, the first contains the pairs with matching keys, the second contains the rest' do
+      expect( { 1 => 2, 3 => 4, 6 => 5 }.partition_hash([1, 3])).to eq([{ 1 => 2, 3 => 4 }, { 6 => 5 }])
     end
 
-    should 'return two hashes, the first contains the pairs with identified by the block, the second contains the rest' do
-      assert_equal([{ 1 => 2, 3 => 4 }, { 6 => 5 }], { 1 => 2, 3 => 4, 6 => 5 }.partition_hash { |key, value| key < value })
+    it 'return two hashes, the first contains the pairs with identified by the block, the second contains the rest' do
+      expect( { 1 => 2, 3 => 4, 6 => 5 }.partition_hash { |key, value| key < value }).to eq([{ 1 => 2, 3 => 4 }, { 6 => 5 }])
     end
 
-    should 'handle no matches' do
-      assert_equal([{}, { 1 => 2, 3 => 4, 6 => 5 }], { 1 => 2, 3 => 4, 6 => 5 }.partition_hash([100]))
+    it 'handle no matches' do
+      expect( { 1 => 2, 3 => 4, 6 => 5 }.partition_hash([100])).to eq([{}, { 1 => 2, 3 => 4, 6 => 5 }])
     end
 
-    should 'handle all matches' do
-      assert_equal([{ 1 => 2, 3 => 4, 6 => 5 }, {}], { 1 => 2, 3 => 4, 6 => 5 }.partition_hash { |_key, _value| true })
+    it 'handle all matches' do
+      expect( { 1 => 2, 3 => 4, 6 => 5 }.partition_hash { |_key, _value| true }).to eq([{ 1 => 2, 3 => 4, 6 => 5 }, {}])
     end
   end
 
   context '- operator' do
-    should 'return a hash with pairs removed that match the keys in rhs array' do
-      assert_equal({ 3 => 4 }, { 1 => 2, 3 => 4, 6 => 5 } - [1, 6])
+    it 'return a hash with pairs removed that match the keys in rhs array' do
+      expect({ 1 => 2, 3 => 4, 6 => 5 } - [1, 6]).to eq({ 3 => 4 })
     end
 
-    should 'handle empty rhs array' do
-      assert_equal({ 1 => 2, 3 => 4, 6 => 5 }, { 1 => 2, 3 => 4, 6 => 5 } - [])
+    it 'handle empty rhs array' do
+      expect({ 1 => 2, 3 => 4, 6 => 5 } - []).to eq({ 1 => 2, 3 => 4, 6 => 5 })
     end
 
-    should 'handle no matches in rhs array' do
-      assert_equal({ 1 => 2, 3 => 4, 6 => 5 }, { 1 => 2, 3 => 4, 6 => 5 } - [100, 600])
+    it 'handle no matches in rhs array' do
+      expect({ 1 => 2, 3 => 4, 6 => 5 } - [100, 600]).to eq({ 1 => 2, 3 => 4, 6 => 5 })
     end
 
-    should 'handle all matches in rhs array' do
-      assert_equal({}, { 1 => 2, 3 => 4, 6 => 5 } - [1, 3, 6])
+    it 'handle all matches in rhs array' do
+      expect({ 1 => 2, 3 => 4, 6 => 5 } - [1, 3, 6]).to eq({})
     end
   end
 
   context '& operator' do
-    should 'return a hash with pairs removed that do NOT match the keys in rhs array' do
-      assert_equal({ 1 => 2, 6 => 5 }, { 1 => 2, 3 => 4, 6 => 5 } & [1, 6])
+    it 'return a hash with pairs removed that do NOT match the keys in rhs array' do
+      expect({ 1 => 2, 3 => 4, 6 => 5 } & [1, 6]).to eq({ 1 => 2, 6 => 5 })
     end
 
-    should 'handle empty rhs array' do
-      assert_equal({}, { 1 => 2, 3 => 4, 6 => 5 } & [])
+    it 'handle empty rhs array' do
+      expect({ 1 => 2, 3 => 4, 6 => 5 } & []).to eq({})
     end
 
-    should 'handle no matches in rhs array' do
-      assert_equal({}, { 1 => 2, 3 => 4, 6 => 5 } & [100, 600])
+    it 'handle no matches in rhs array' do
+      expect({ 1 => 2, 3 => 4, 6 => 5 } & [100, 600]).to eq({})
     end
 
-    should 'handle all matches in rhs array' do
-      assert_equal({ 1 => 2, 3 => 4, 6 => 5 }, { 1 => 2, 3 => 4, 6 => 5 } & [1, 3, 6])
+    it 'handle all matches in rhs array' do
+      expect({ 1 => 2, 3 => 4, 6 => 5 } & [1, 3, 6]).to eq({ 1 => 2, 3 => 4, 6 => 5 })
     end
   end
 end
