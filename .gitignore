@@ -12,9 +12,7 @@ lib/bundler/man
 pkg
 pkg/
 rdoc
-test/reports
-test/tmp
-test/version_tmp
+spec/reports
 
 tmp
 *.bundle
