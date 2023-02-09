@@ -4,6 +4,10 @@ Inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Note: This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.2] - Pre-Release-1
+### Added
+- Relaxed version requirement for ActiveSupport 
+
 ## [0.4.1] - 2020-06-17
 ### Fixed
 - Support Ruby < 2.5 by adding `begin`/`end` around `rescue` in `retry_on_exception`. 
@@ -27,6 +31,8 @@ Note: This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0
 - Enumerable::build_hash method ported from HoboSupport
 - Enumerable::* operator ported from HoboSupport
 
+[0.4.1-pre-release.1]: https://github.com/Invoca/invoca-utils/compare/v0.4.1...v0.4.1-pre-release.1
+[0.4.1]: https://github.com/Invoca/invoca-utils/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/Invoca/invoca-utils/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/Invoca/invoca-utils/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/Invoca/invoca-utils/compare/v0.1.1...v0.2.0

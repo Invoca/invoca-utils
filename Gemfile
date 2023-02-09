@@ -2,14 +2,9 @@
 
 source 'https://rubygems.org'
 
+# Specify all your gems dependencies, both run time and development, in invoca-env.gemspec
 gemspec
 
-source 'https://rubygems.org' do
-  gem 'activesupport', '~> 5.2'
-  gem 'pry'
-  gem 'rake'
-  gem 'rspec'
-  gem 'rspec_junit_formatter'
-  gem 'ruby-prof'
-  gem 'tzinfo'
-end
+# Specify your gems that need to point to
+# - a source other than rubygems.org, ex: private gem repository
+# - a local path in development
