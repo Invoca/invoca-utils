@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    invoca-utils (0.4.2.pre.pre.pre.release.1)
+    invoca-utils (0.5.0.pre.1)
       activesupport (>= 5.0)
 
 GEM
@@ -17,12 +17,11 @@ GEM
       bundler
       rake
       thor (>= 0.14.0)
-    climate_control (0.2.0)
     concurrent-ruby (1.2.0)
     diff-lcs (1.5.0)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
-    minitest (5.17.0)
+    minitest (5.10.3)
     rake (13.0.6)
     rspec (3.12.0)
       rspec-core (~> 3.12.0)
@@ -50,8 +49,8 @@ PLATFORMS
 DEPENDENCIES
   activesupport (~> 6.0)
   appraisal (~> 2.4)
-  climate_control (~> 0.2)
   invoca-utils!
+  minitest (~> 5.10.0)
   rake (~> 13.0)
   rspec (~> 3.0)
   rspec_junit_formatter (~> 0.4)

@@ -4,7 +4,7 @@ Inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Note: This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.4.2] - Pre-Release-1
+## [0.5.0] - Pre-Release-1
 ### Added
 - Relaxed version requirement for ActiveSupport 
 
