@@ -31,7 +31,7 @@ Note: This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0
 - Enumerable::build_hash method ported from HoboSupport
 - Enumerable::* operator ported from HoboSupport
 
-[0.4.1-pre-release.1]: https://github.com/Invoca/invoca-utils/compare/v0.4.1...v0.4.1-pre-release.1
+[0.5.0.pre.1]: https://github.com/Invoca/invoca-utils/compare/v0.4.1...v0.5.0.pre.1
 [0.4.1]: https://github.com/Invoca/invoca-utils/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/Invoca/invoca-utils/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/Invoca/invoca-utils/compare/v0.2.0...v0.3.0
