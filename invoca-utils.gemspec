@@ -30,7 +30,6 @@ Gem::Specification.new do |spec|
 
   # Specify this gem"s development and test dependencies below
   spec.add_development_dependency "appraisal",             "~> 2.4"
-  spec.add_development_dependency "climate_control",       "~> 0.2"
   spec.add_development_dependency "rake",                  "~> 13.0"
   spec.add_development_dependency "rspec",                 "~> 3.0"
   spec.add_development_dependency "rspec_junit_formatter", "~> 0.4"
