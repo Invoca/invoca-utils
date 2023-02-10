@@ -2,6 +2,6 @@
 
 module Invoca
   module Utils
-    VERSION = "0.5.0.pre.1"
+    VERSION = "0.5.0"
   end
 end
