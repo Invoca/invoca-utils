@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-# Specify all your gems dependencies, both run time and development, in invoca-env.gemspec
+# Specify your gem's run time dependencies in invoca-utils.gemspec
 gemspec
 
 # Specify your gem's development and test dependencies below
