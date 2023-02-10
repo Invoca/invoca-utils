@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["development@invoca.com"]
 
   spec.summary       = "A public collection of helpers used in multiple projects"
-  spec.description       = "A public collection of helpers used in multiple projects"
+  spec.description   = "A public collection of helpers used in multiple projects"
   spec.homepage      = "https://github.com/Invoca/invoca-utils"
 
   spec.metadata["allowed_push_host"] = "https://rubygems.org"
