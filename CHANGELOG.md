@@ -2,8 +2,12 @@
 
 Inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-Note: This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+**Note:** This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.1] - 2023-02-17
+### Added
+- Integrated Appraisal into github actions for testing across multiple versions of ActiveSupport
+- 
 ## [0.5.0] - 2023-02-10
 ### Added
 - Relaxed version requirement for ActiveSupport 
@@ -31,6 +35,7 @@ Note: This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0
 - Enumerable::build_hash method ported from HoboSupport
 - Enumerable::* operator ported from HoboSupport
 
+[0.5.1]: https://github.com/Invoca/invoca-utils/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/Invoca/invoca-utils/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/Invoca/invoca-utils/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/Invoca/invoca-utils/compare/v0.3.0...v0.4.0

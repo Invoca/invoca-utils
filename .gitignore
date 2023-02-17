@@ -1,24 +1,37 @@
+# OS artifacts
 .DS_Store
+
+# IDEs
+.idea/
+
+# Documentation artifacts
+.yardoc
+_yardoc
+doc/
+rdoc
+
+# Rubocop
+.rubocop-http*
+
+# test artifacts
+spec/reports
+coverage
+
+# Appraisal
+gemfiles/*.lock
+
+# gem building artifacts
+*.a
+*.bundle
 *.gem
+*.o
 *.rbc
+*.so
 .bundle
 .config
-.yardoc
 InstalledFiles
-_yardoc
-coverage
-doc/
+checksums
 lib/bundler/man
-pkg
-pkg/
-rdoc
-spec/reports
-
-tmp
-*.bundle
-*.so
-*.o
-*.a
 mkmf.log
-.idea/
-.rubocop-http*
+pkg
+tmp
