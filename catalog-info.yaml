@@ -14,7 +14,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: invoca-utils-gem
-  title: Invoca::Util
+  title: Invoca::Utils
   description: A public collection of helpers used in multiple projects
   tags:
   - ruby
