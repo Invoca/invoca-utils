@@ -7,6 +7,7 @@ gemspec
 
 # Specify your gem's development and test dependencies below
 gem "appraisal",             "~> 2.4"
+gem "appraisal-matrix"
 gem "rake",                  "~> 13.0"
 gem "rspec",                 "~> 3.0"
 gem "rspec_junit_formatter", "~> 0.4"

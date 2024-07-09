@@ -4,6 +4,10 @@ Inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 **Note:** This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - Unreleased
+### Removed
+- Removed support for Ruby < 3 and Rails < 6
+
 ## [0.5.1] - 2023-02-17
 ### Added
 - Integrated Appraisal into github actions for testing across multiple versions of ActiveSupport
