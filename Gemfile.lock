@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    invoca-utils (0.5.1)
+    invoca-utils (1.0.0)
       activesupport (>= 6.0)
 
 GEM
@@ -25,11 +25,11 @@ GEM
       appraisal (~> 2.2)
     base64 (0.2.0)
     bigdecimal (3.1.8)
-    concurrent-ruby (1.2.2)
+    concurrent-ruby (1.3.3)
     connection_pool (2.4.1)
     diff-lcs (1.5.0)
     drb (2.2.1)
-    i18n (1.12.0)
+    i18n (1.14.5)
       concurrent-ruby (~> 1.0)
     minitest (5.10.3)
     mutex_m (0.2.0)
