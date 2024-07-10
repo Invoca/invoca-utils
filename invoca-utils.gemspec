@@ -25,10 +25,10 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   # this should match the minimum github pipeline targets
-  # which is currently set to 2.5
-  spec.required_ruby_version = ">= 2.5.0"
+  # which is currently set to 3.1
+  spec.required_ruby_version = ">= 3.1"
 
-  spec.add_dependency "activesupport", ">= 5.0"
+  spec.add_dependency "activesupport", ">= 6.0"
 
   # Specify this gem's development and test dependencies in Gemfile
 end
