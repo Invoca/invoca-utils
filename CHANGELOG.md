@@ -5,8 +5,12 @@ Inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 **Note:** This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.0.0] - Unreleased
+### Added
+- Require Ruby > 3.1
+- Allow ActiveSupport >= 6
 ### Removed
-- Removed support for Ruby < 3 and Rails < 6
+- Support for Ruby < 3
+- Support for ActiveSupport < 6
 
 ## [0.5.1] - 2023-02-17
 ### Added

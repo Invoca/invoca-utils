@@ -17,8 +17,6 @@ jobs:
           - gemfiles/activesupport_6_1.gemfile
           - gemfiles/activesupport_7_0.gemfile
           - gemfiles/activesupport_7_1.gemfile
-#          - gemfiles/activesupport_6.gemfile
-#          - gemfiles/activesupport_7.gemfile
 
     env:
       BUNDLE_GEMFILE: ${{ matrix.gemfile }}
