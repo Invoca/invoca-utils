@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    invoca-utils (1.0.0)
+    invoca-utils (0.6.0)
       activesupport (>= 6.0)
 
 GEM

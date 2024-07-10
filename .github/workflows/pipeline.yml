@@ -34,13 +34,3 @@ jobs:
           bundler-cache: true
       - name: Run Tests
         run: bundle exec rspec
-  build_success:
-    if: always()
-    needs:
-      - tests
-    runs-on: Ubuntu-latest
-    steps:
-      - name: Decide whether the needed jobs succeeded or failed
-        uses: re-actors/alls-green@release/v1
-        with:
-          jobs: ${{ toJSON(needs) }}
