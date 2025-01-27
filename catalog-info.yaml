@@ -19,6 +19,8 @@ metadata:
   tags:
   - ruby
   - gem
+  - public
+  - rails-dependent
   annotations:
     buildkite.com/project-slug: Invoca/invoca-utils
     github.com/project-slug: Invoca/invoca-utils
