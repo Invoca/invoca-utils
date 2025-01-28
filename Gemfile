@@ -15,8 +15,9 @@ gem "rspec_junit_formatter", "~> 0.4"
 # version should support ruby 2.5 which is the minimum github pipeline targets
 gem "minitest",              "~> 5.10.0"
 
-gem "base64", "~> 0.2.0"
-gem "bigdecimal", "~> 3.1"
-gem "mutex_m", "~> 0.2.0"
 
 gem "concurrent-ruby", "~> 1.3", "< 1.3.5"
+
+gem "base64", ">= 0.2.0"
+gem "bigdecimal", ">= 3.1"
+gem "mutex_m", ">= 0.2.0"
