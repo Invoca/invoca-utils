@@ -4,6 +4,13 @@ Inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 **Note:** This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.1] - 2025-03-27
+### Fixed
+- Fixed a global namespace collision with diff-lcs over the `Diff` constant
+
+### Added
+- Loading `invoca/utils/diff` now gives access to both `invoca-utils` and `diff-lcs` diff helpers
+
 ## [0.6.0] - 2024-07-10
 ### Added
 - Require Ruby > 3.1
