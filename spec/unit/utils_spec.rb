@@ -30,8 +30,13 @@ describe Invoca::Utils do
         load 'invoca/utils.rb'
       end
 
-      it "not define Diff as Invoca::Utils::Diff" do
-        expect(@class).to eq(::Diff)
+      it "define Diff as Invoca::Utils::Diff" do
+        expect(Invoca::Utils::Diff).to eq(::Diff)
+      end
+
+      it "still allows access to diff-lcs methods" do
+        expect(defined?(Diff::LCS)).to eq("constant")
+        expect(Diff::LCS).to respond_to(:diff)
       end
     end
 

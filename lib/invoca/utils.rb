@@ -20,9 +20,7 @@ require "invoca/utils/exceptions"
 require "invoca/utils/guaranteed_utf8_string"
 require "invoca/utils/version"
 
-unless defined?(Diff)
-  Diff = Invoca::Utils::Diff
-end
+Diff = Invoca::Utils::Diff
 
 unless defined?(Diffable)
   Diffable = Invoca::Utils::Diffable
