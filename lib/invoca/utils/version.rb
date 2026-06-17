@@ -2,6 +2,6 @@
 
 module Invoca
   module Utils
-    VERSION = "0.6.1"
+    VERSION = "0.7.0.colin.1"
   end
 end

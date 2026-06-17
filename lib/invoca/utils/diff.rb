@@ -2,13 +2,9 @@
 
 # adapted from http://users.cybercity.dk/~dsl8950/ruby/diff-0.3.tar.gz
 
-require "diff/lcs"
-
 module Invoca
   module Utils
     class Diff
-
-      LCS = ::Diff::LCS
 
       VERSION = 0.3
 
