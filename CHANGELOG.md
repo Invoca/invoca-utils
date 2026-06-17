@@ -4,7 +4,7 @@ Inspired by [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 **Note:** This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.7.0] - UNRELEASED
+## [0.7.0] - 2026-06-17
 ### Removed
 - Global `Diff` and `Diffable` constants; use `Invoca::Utils::Diff` and `Invoca::Utils::Diffable` instead
 - Runtime dependency on `diff-lcs`; callers needing `Diff::LCS` should depend on and require `diff-lcs` directly

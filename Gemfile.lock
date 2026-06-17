@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    invoca-utils (0.7.0.colin.1)
+    invoca-utils (0.7.0)
       activesupport (>= 6.0)
 
 GEM
@@ -79,4 +79,4 @@ DEPENDENCIES
   rspec_junit_formatter (~> 0.4)
 
 BUNDLED WITH
-   2.6.3
+   2.6.5
