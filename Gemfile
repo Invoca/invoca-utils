@@ -11,6 +11,8 @@ gem "appraisal-matrix"
 gem "rake",                  "~> 13.0"
 gem "rspec",                 "~> 3.0"
 gem "rspec_junit_formatter", "~> 0.4"
+gem "simplecov",             "~> 0.22"
+gem "simplecov-lcov",        "~> 0.8"
 # minitest, which is a transitive dependency of activesupport,
 # version should support ruby 2.5 which is the minimum github pipeline targets
 gem "minitest",              "~> 5.10.0"
